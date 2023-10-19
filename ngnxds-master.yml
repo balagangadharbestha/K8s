@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ngnxds
+spec:
+  selector:
+    matchLabels:
+     app: ngnxpod
+  template:
+    metadata:
+      name: nginxrcpod
+      labels:
+        app: ngnxpod
+    spec:
+      tolerations:
+      - key:  "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: NoSchedule
+      containers:
+      - name: nginxcontainer
+        image: nginx
+        ports:
+        - containerPort: 80
