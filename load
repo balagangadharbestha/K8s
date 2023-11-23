@@ -1,0 +1,16 @@
+# run command for load
+---------------------------
+kubectl run -i -t load --rm --image=busybox /bin/sh
+
+# run this command for default namespace  
+-----------------------------------------
+while true; do wget -q -O- http://websvc; done   --> websvc is your service
+
+# run this command for specific namespace --> test-ns is namespace
+while true; do wget -q -O- http://websvc.test-ns.svc.cluster.local; done
+                       OR
+while true; do wget -q -O- http://websvc.test-ns; done
+
+
+
+
