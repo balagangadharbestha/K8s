@@ -1,0 +1,7 @@
+kubeadm join 10.128.0.5:6443 --token kzoz0r.zlqb844ip13wzu1n \
+        --discovery-token-ca-cert-hash sha256:12cc06a3b380b5186c0ac5c30222e7ae7502805db27e70f6421b5ee865cd700b
+kubeadm join 10.128.0.5:6443 --token iyefjm.sbs2kgbuwzteu28j --discovery-token-ca-cert-hash sha256:12cc06a3b380b5186c0ac5c30222e7ae7502805db27e70f6421b5ee865cd700b
+kubeadm join 10.128.0.5:6443 --token lla3js.10ysk3lfrh82gvmg --discovery-token-ca-cert-hash sha256:12cc06a3b380b5186c0ac5c30222e7ae7502805db27e70f6421b5ee865cd700b
+
+kubeadm join 10.128.0.5:6443 --token ey1yo9.ntg02ovbtwglenyi --discovery-token-ca-cert-hash sha256:12cc06a3b380b5186c0ac5c30222e7ae7502805db27e70f6421b5ee865cd700b
+

@@ -1,0 +1,14 @@
+apiVersion: v1 
+kind: PersistentVolume
+metadata:
+  name: nfsvol
+  namespace: test-ns
+spec:
+  capacity:
+    storage: 4Gi 
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: 10.128.0.30
+    path: /mnt/share
