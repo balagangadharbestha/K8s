@@ -2,11 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
    name: mavendeployment
+   namespace: test-ns
 spec:
   replicas: 2
   revisionHistoryLimit: 10
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+       maxUnavailable: 2
+       maxSurge: 1
+  minReadySeconds: 30
   selector:
      matchLabels:
         app: mavenweb
@@ -18,7 +23,7 @@ spec:
     spec:
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image:  dockerhandson/maven-web-application:1
         ports:
         - containerPort: 8080
 ---
@@ -26,6 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
       name: websvc
+      namespace: test-ns
 spec:
   type: NodePort
   selector:
@@ -33,4 +39,19 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: example-limit-range
+  namespace: test-ns
+spec:
+  limits:
+  - default:
+      memory: 512Mi
+      cpu: 200m
+    defaultRequest:
+      memory: 256Mi
+      cpu: 200m
+    type: Container
 

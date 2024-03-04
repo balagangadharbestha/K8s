@@ -1,16 +1,16 @@
 ---
-kind: ServiceAccount
 apiVersion: v1
+kind: ServiceAccount
 metadata:
   name: nfs-pod-provisioner-sa
   namespace: kube-system
 ---
-kind: ClusterRole # Role of kubernetes
-apiVersion: rbac.authorization.k8s.io/v1 # auth API
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: nfs-provisioner-clusterRole
 rules:
-  - apiGroups: [""] # rules on persistentvolumes
+  - apiGroups: [""]
     resources: ["persistentvolumes"]
     verbs: ["get", "list", "watch", "create", "delete"]
   - apiGroups: [""]
@@ -29,11 +29,11 @@ metadata:
   name: nfs-provisioner-rolebinding
 subjects:
   - kind: ServiceAccount
-    name: nfs-pod-provisioner-sa # defined on top of file
+    name: nfs-pod-provisioner-sa
     namespace: kube-system
-roleRef: # binding cluster role to service account
+roleRef:
   kind: ClusterRole
-  name: nfs-provisioner-clusterRole # name defined in clusterRole
+  name: nfs-provisioner-clusterRole
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: Role
@@ -53,14 +53,12 @@ metadata:
   namespace: kube-system
 subjects:
   - kind: ServiceAccount
-    name: nfs-pod-provisioner-sa # same as top of the file
-    # replace with namespace where provisioner is deployed
+    name: nfs-pod-provisioner-sa
     namespace: kube-system
 roleRef:
   kind: Role
   name: nfs-pod-provisioner-otherRoles
   apiGroup: rbac.authorization.k8s.io
-  
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -79,7 +77,7 @@ spec:
       labels:
         app: nfs-pod-provisioner
     spec:
-      serviceAccountName: nfs-pod-provisioner-sa # name of service account created in rbac.yaml
+      serviceAccountName: nfs-pod-provisioner-sa
       containers:
         - name: nfs-pod-provisioner
           image: rkevin/nfs-subdir-external-provisioner:fix-k8s-1.20
@@ -87,25 +85,25 @@ spec:
             - name: nfs-provisioner-v
               mountPath: /persistentvolumes
           env:
-            - name: PROVISIONER_NAME # do not change
-              value: nfs-provisioner # SAME AS PROVISONER NAME VALUE IN STORAGECLASS
-            - name: NFS_SERVER # do not change
-              value: 10.128.0.57 # Ip of the NFS SERVER
-            - name: NFS_PATH # do not change
-              value: /mnt/nfs-share # path to nfs directory setup
+            - name: PROVISIONER_NAME
+              value: nfs-provisioner
+            - name: NFS_SERVER
+              value: 10.128.0.57
+            - name: NFS_PATH
+              value: /mnt/nfs-share
       volumes:
-       - name: nfs-provisioner-v # same as volumemouts name
+       - name: nfs-provisioner-v
          nfs:
            server: 10.128.0.57
-           path:  /mnt/nfs-share   
+           path:  /mnt/nfs-share
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: nfs-storageclass # IMPORTANT pvc needs to mention this name
+  name: nfs-storageclass
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
-provisioner: nfs-provisioner # name can be anything
+provisioner: nfs-provisioner
 parameters:
   archiveOnDelete: "false"
-reclaimPolicy: Retain  
+

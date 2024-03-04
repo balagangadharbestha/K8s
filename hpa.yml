@@ -20,11 +20,11 @@ spec:
           containerPort: 8080
         resources:
           requests:
-            cpu: 500m
-            memory: 250Mi
+            cpu: 100m
+            memory: 64Mi
           limits:
-            cpu: 1
-            memory: 500Mi
+            cpu: 100m
+            memory: 64Mi
 ---
 apiVersion: v1
 kind: Service
@@ -48,18 +48,18 @@ spec:
     kind: Deployment
     name: hpadeployment
   minReplicas: 1
-  maxReplicas: 4
+  maxReplicas: 10
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 10
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 10
 

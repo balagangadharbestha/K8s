@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
    name: mavendeployment
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 10
   strategy:
     type: Recreate
@@ -16,9 +16,19 @@ spec:
        labels:
         app: mavenweb
     spec:
+      affinity:
+         nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 1
+                preference:
+                   matchExpressions:
+                   - key: name 
+                     operator: In
+                     values:
+                     - one
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image:  dockerhandson/maven-web-application:1
         ports:
         - containerPort: 8080
 ---

@@ -16,9 +16,19 @@ spec:
        labels:
         app: mavenweb
     spec:
+      affinity:
+         podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - nginx
+              topologyKey: "kubernetes.io/hostname"
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image:  dockerhandson/maven-web-application:1
         ports:
         - containerPort: 8080
 ---

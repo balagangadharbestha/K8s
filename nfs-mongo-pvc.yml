@@ -84,9 +84,20 @@ spec:
           mountPath: /data/db
       volumes:
       - name: mongodbvol
-        nfs:
-          server: 10.128.0.57
-          path: /mnt/nfs-share
+        persistentVolumeClaim:
+             claimName: mongopvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongopvc
+  namespace: test-ns
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+       storage: 1Gi
 ---
 apiVersion: v1
 kind: Service

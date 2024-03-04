@@ -8,7 +8,7 @@ spec:
     storage: 4Gi 
   volumeMode: Filesystem
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   nfs:
-    server: 10.128.0.30
-    path: /mnt/share
+    server: 10.128.0.57
+    path: /mnt/nfs-share

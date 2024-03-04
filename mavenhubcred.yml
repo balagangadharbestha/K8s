@@ -16,9 +16,11 @@ spec:
        labels:
         app: mavenweb
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image: gangadockerhub/java-web-app:2
         ports:
         - containerPort: 8080
 ---

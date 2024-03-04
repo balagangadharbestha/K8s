@@ -16,9 +16,13 @@ spec:
        labels:
         app: mavenweb
     spec:
+      tolerations:
+      - key: name
+        operator: Exists
+        effect: NoSchedule    
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image:  dockerhandson/maven-web-application:1
         ports:
         - containerPort: 8080
 ---

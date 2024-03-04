@@ -15,10 +15,12 @@ spec:
        name: mavenpod
        labels:
         app: mavenweb
-    spec:
+    spec:   
+      nodeSelector:
+        name: two 
       containers:
       - name: webcontainer
-        image:  dockerhandson/maven-web-application:6
+        image:  dockerhandson/maven-web-application:1
         ports:
         - containerPort: 8080
 ---

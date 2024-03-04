@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: python 
+   namespace: test-ns
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  strategy:
+    type: Recreate
+  selector:
+     matchLabels:
+        app: pythonapp
+  template:
+    metadata:
+       name: pythonpod
+       labels:
+        app: pythonapp
+    spec:
+      containers:
+      - name: pyhonflask
+        image:  dockerhandson/python-flask-app:1
+        ports:
+        - containerPort: 5000 
+        resources:
+          requests: 
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 250Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+      name: pythonsvc
+      namespace: test-ns
+spec:
+  type: NodePort
+  selector:
+      app: pythonapp
+  ports:
+  - port: 5000
+    targetPort: 5000
+

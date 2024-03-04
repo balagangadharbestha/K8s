@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mavenconfig
+data:
+  tomcat-users.xml:
+  
+    <?xml version='1.0' encoding='utf-8'?>
+
+    <tomcat-users xmlns="http://tomcat.apache.org/xml"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+                  version="1.0">
+      <user username="admin" password="tomcat" roles="admin-gui,manager-gui"/>
+    </tomcat-users>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: mavendeployment
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  strategy:
+    type: Recreate
+  selector:
+     matchLabels:
+        app: mavenweb
+  template:
+    metadata:
+       name: mavenpod
+       labels:
+        app: mavenweb
+    spec:
+      containers:
+      - name: webcontainer
+        image:  dockerhandson/maven-web-application:1
+        ports:
+        - containerPort: 8080
+        volumeMounts: 
+        - name : mavenweb
+          mountPath: "/usr/local/tomcat/conf/tomcat-users.xml"
+          subPath: "tomcat-users.xml"
+      volumes:
+      - name: mavenweb
+        configMap: 
+         name: mavenconfig
+         items:
+         - key: "tomcat-users.xml"
+           path: "tomcat-users.xml"
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+      name: websvc
+spec:
+  type: NodePort
+  selector:
+      app: mavenweb
+  ports:
+  - port: 80
+    targetPort: 8080
+

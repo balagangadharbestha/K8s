@@ -30,9 +30,15 @@ spec:
         - name: MONGO_DB_HOSTNAME
           value: mongosvc
         - name: MONGO_DB_USERNAME
-          value: devdb
+          valueFrom:
+            configMapKeyRef:
+               name: springappconfig
+               key: mongousername
         - name: MONGO_DB_PASSWORD
-          value: devdb@123
+          valueFrom:
+            configMapKeyRef:
+               name: springappconfig
+               key: mongopassword
         resources:
           requests:
             cpu: 500m
@@ -76,9 +82,15 @@ spec:
          - containerPort: 27017
          env:
          - name: MONGO_INITDB_ROOT_USERNAME
-           value: devdb
+           valueFrom:
+            configMapKeyRef:
+               name: springappconfig
+               key: mongousername
          - name: MONGO_INITDB_ROOT_PASSWORD
-           value: devdb@123
+           valueFrom:
+            configMapKeyRef:
+               name: springappconfig
+               key: mongopassword
 ---
 apiVersion: v1
 kind: Service
